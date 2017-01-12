@@ -1,15 +1,17 @@
 from gevent import monkey; monkey.patch_all()
-from time import sleep
-from bottle import route, run
+from bottle import Bottle, run, debug
 import os
-from sklearn import datasets
+from routes import one
 
-@route('/')
-def hello():
-    datasets.load_iris()
-    yield 'START'
-    sleep(5)
-    yield 'MORE'
-
+# Environment variables
+debugMode = os.environ.get('DEBUG', False)
 appPort = int(os.environ.get('PORT', 5000))
-run(host='0.0.0.0', port=appPort, server='gevent', debug=True)
+
+# Create parent app and mount child routes
+app = Bottle()
+app.mount('/one/', one.app)
+
+if __name__ == '__main__':
+    if debugMode:
+        debug(True)
+    run(app, host = '0.0.0.0', port=appPort, server='gevent', reloader=True)
