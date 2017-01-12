@@ -1,4 +1,5 @@
 from bottle import route, run
+import os
 from sklearn import datasets
 
 @route('/')
