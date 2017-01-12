@@ -6,4 +6,5 @@ def hello():
     datasets.load_iris()
     return "Hello World!"
 
-run(host='localhost', port=8080, debug=True)
+appPort = int(os.environ.get('PORT', 5000))
+run(host='0.0.0.0', port=appPort, debug=True)
